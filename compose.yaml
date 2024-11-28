@@ -3,7 +3,7 @@ services:
     image: ${IMAGES_PREFIX:-}app-php
     restart: unless-stopped
     environment:
-      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
+#      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
@@ -31,6 +31,8 @@ services:
       - target: 443
         published: ${HTTP3_PORT:-443}
         protocol: udp
+    networks:
+        dev_proxy:
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
@@ -54,6 +56,8 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+    networks:
+        dev_proxy:
 
 volumes:
   caddy_data:
@@ -64,3 +68,7 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+networks:
+    dev_proxy:
+        external: true

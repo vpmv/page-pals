@@ -9,6 +9,14 @@ framework:
     #esi: true
     #fragments: true
 
+    http_client:
+        scoped_clients:
+            biblio.client:
+                base_uri: '%env(BIBLIO_HOST)%'
+                headers: 
+                    Accept: 'application/json'
+                auth_bearer: '%env(BIBLIO_TOKEN)%'
+
 when@test:
     framework:
         test: true
